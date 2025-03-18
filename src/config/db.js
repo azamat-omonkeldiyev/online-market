@@ -12,4 +12,4 @@ async function ConnectDb() {
     // console.log("db synced");
 };
 
-module.exports = {ConnectDb, DataTypes, db}
+module.exports = {ConnectDb, DataTypes, db};
