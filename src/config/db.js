@@ -8,8 +8,8 @@ const db = new Sequelize("home","root","1234",{
 async function ConnectDb() {
     await db.authenticate();
     console.log("db connected");
-    await db.sync({force: true});
-    console.log("db synced");
+    // await db.sync({force: true});
+    // console.log("db synced");
 };
 
 module.exports = {ConnectDb, DataTypes, db}
