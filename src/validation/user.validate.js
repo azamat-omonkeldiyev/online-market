@@ -49,15 +49,6 @@ const userValidationSchema = Joi.object({
             "string.min": "Password must be at least 8 characters long",
             "string.max": "Password cannot be longer than 128 characters"
         }),
-    location: Joi.string()
-        .min(3)
-        .max(255)
-        .required()
-        .messages({
-            "string.empty": "Location is required",
-            "string.min": "Location must be at least 3 characters long",
-            "string.max": "Location cannot be longer than 255 characters"
-        }),
     image: Joi.string()
         .uri()
         .required()
