@@ -17,7 +17,7 @@ const Comment = db.define("comment", {
     allowNull: false,
   },
   product_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     allowNull: false,
     references: {
       model: Product,

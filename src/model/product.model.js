@@ -5,7 +5,7 @@ const Comment = require("./comment.model");
 
 const Product = db.define("product", {
   id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.UUID,
     defaultValue: DataTypes.UUIDV4,
     primaryKey: true,
   },
