@@ -133,9 +133,7 @@ router.get("/:id", productController.getProduct);
  *       500:
  *         description: Server error
  */
-router.post(
-  "/",  productController.createProduct
-);
+router.post("/", productController.createProduct);
 
 /**
  * @swagger
@@ -171,10 +169,7 @@ router.post(
  *       500:
  *         description: Server error
  */
-router.put(
-  "/:id",
-  productController.updateProduct
-);
+router.put("/:id", productController.updateProduct);
 
 /**
  * @swagger
@@ -199,6 +194,5 @@ router.put(
  *         description: Server error
  */
 router.delete("/:id", productController.deleteProduct);
-
 
 module.exports = router;
