@@ -7,17 +7,6 @@ const {
   productUpdateSchema,
 } = require("../validation/product.validate");
 
-const validateRequest = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body, { abortEarly: false });
-    if (error) {
-      const errorMessages = error.details.map((detail) => detail.message);
-      return res.status(400).json({ errors: errorMessages });
-    }
-    next();
-  };
-};
-
 /**
  * @swagger
  * /products:
@@ -145,9 +134,7 @@ router.get("/:id", productController.getProduct);
  *         description: Server error
  */
 router.post(
-  "/",
-  validateRequest(productValidationSchema),
-  productController.createProduct
+  "/",  productController.createProduct
 );
 
 /**
@@ -186,7 +173,6 @@ router.post(
  */
 router.put(
   "/:id",
-  validateRequest(productUpdateSchema),
   productController.updateProduct
 );
 
@@ -214,40 +200,5 @@ router.put(
  */
 router.delete("/:id", productController.deleteProduct);
 
-/**
- * @swagger
- * /products/upload:
- *   post:
- *     summary: Upload a product image
- *     tags: [Products]
- *     requestBody:
- *       required: true
- *       content:
- *         multipart/form-data:
- *           schema:
- *             type: object
- *             properties:
- *               image:
- *                 type: string
- *                 format: binary
- *             required:
- *               - image
- *     responses:
- *       201:
- *         description: Image uploaded
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 imageUrl:
- *                   type: string
- *                   example: /uploads/123456789.jpg
- *       400:
- *         description: Invalid file or no file provided
- *       500:
- *         description: Server error
- */
-router.post("/upload", productController.uploadImage);
 
 module.exports = router;

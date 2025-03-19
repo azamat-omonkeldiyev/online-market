@@ -109,10 +109,10 @@ const deleteComment = async (req, res) => {
   }
 };
 
-module.exports = [
+module.exports = {
     getComments,
     getComment,
     createComment,
     updateComment,
     deleteComment,
-]
+}

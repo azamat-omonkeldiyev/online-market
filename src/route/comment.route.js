@@ -1,22 +1,11 @@
 const express = require("express");
 const router = express.Router();
 const Joi = require("joi");
-const commentController = require("../controller/comment.controller");
+const commentController = require("./../controller/comment.controller");
 const {
   commentValidationSchema,
   commentUpdateSchema,
 } = require("../validation/comment.validate");
-
-const validateRequest = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body, { abortEarly: false });
-    if (error) {
-      const errorMessages = error.details.map((detail) => detail.message);
-      return res.status(400).json({ errors: errorMessages });
-    }
-    next();
-  };
-};
 
 /**
  * @swagger
@@ -77,7 +66,7 @@ const validateRequest = (schema) => {
  *       500:
  *         description: Server error
  */
-router.get("/", commentController.getComments);
+router.get("/", commentController.getComment);
 
 /**
  * @swagger
@@ -131,9 +120,7 @@ router.get("/:id", commentController.getComment);
  *         description: Server error
  */
 router.post(
-  "/",
-  validateRequest(commentValidationSchema),
-  commentController.createComment
+  "/",  commentController.createComment
 );
 
 /**
@@ -170,9 +157,7 @@ router.post(
  *         description: Server error
  */
 router.put(
-  "/:id",
-  validateRequest(commentUpdateSchema),
-  commentController.updateComment
+  "/:id",  commentController.updateComment
 );
 
 /**

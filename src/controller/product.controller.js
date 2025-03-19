@@ -3,38 +3,8 @@ const Category = require('../model/category.model')
 const User = require('../model/user.model')
 const Comment = require('../model/comment.model')
 
-const multer = require('multer');
-const path = require('path');
 const { Op } = require("sequelize");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, 'uploads/');
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 5 * 1024 * 1024 }
-});
-
-const uploadImage = [
-  upload.single('image'),
-  async (req, res) => {
-    try {
-      if (!req.file) {
-        return res.status(400).json({ message: 'image is required' });
-      }
-      const imageUrl = `/uploads/${req.file.filename}`;
-      res.status(201).json({ imageUrl });
-    } catch (error) {
-      res.status(500).json({ message: error.message });
-    }
-  }
-];
 
 const getProducts = async (req, res) => {
   try {
@@ -142,11 +112,10 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-module.exports = [
-    uploadImage,
+module.exports = {
     getProducts,
     getProduct,
     createProduct,
     updateProduct,
     deleteProduct,
-]
+}
