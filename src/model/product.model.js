@@ -1,7 +1,6 @@
 const { db, DataTypes } = require("../config/db");
 const Category = require("./category.model");
 const User = require("./user.model");
-const Comment = require("./comment.model");
 
 const Product = db.define("product", {
   id: {
@@ -47,8 +46,10 @@ const Product = db.define("product", {
   },
 });
 
-Product.belongsTo(Category, { foreignKey: "category_id" });
-Product.belongsTo(User, { foreignKey: "author_id" });
-Product.hasMany(Comment, { foreignKey: "product_id" });
+Product.belongsTo(Category, { foreignKey: "category_id", onDelete: "CASCADE" });
+Category.hasMany(Product, { foreignKey: "category_id", onDelete: "CASCADE" });
+
+Product.belongsTo(User, { foreignKey: "author_id", onDelete: "CASCADE" });
+User.hasMany(Product, { foreignKey: "author_id", onDelete: "CASCADE" });
 
 module.exports = Product;

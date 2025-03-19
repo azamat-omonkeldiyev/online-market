@@ -1,7 +1,5 @@
 const { db, DataTypes } = require("../config/db");
 const Region = require("./region.model");
-const Product = require("./product.model");
-const Comment = require("./comment.model");
 
 const User = db.define("user", {
   id: {
@@ -54,7 +52,5 @@ const User = db.define("user", {
 User.belongsTo(Region, { foreignKey: "region_id" });
 Region.hasMany(User, { foreignKey: "region_id", onDelete: "CASCADE" });
 
-User.hasMany(Product, { foreignKey: "author_id" });
-User.hasMany(Comment, { foreignKey: "author_id" });
 
 module.exports = User;
