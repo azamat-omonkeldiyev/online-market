@@ -14,9 +14,9 @@ const app = express();
 app.use(express.json());
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
-app.use("/user", UserRoute);
+app.use("/users", UserRoute);
 app.use("/orders", orderRoutes);
-app.use("/region", regionRegion);
+app.use("/regions", regionRegion);
 app.use("/upload", uploadRoute);
 app.use("/image", express.static(path.join(__dirname, "src", "uploads")));
 ConnectDb();
