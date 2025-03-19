@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Joi = require("joi");
-const commentController = require("./../controller/comment.controller");
-const {
-  commentValidationSchema,
-  commentUpdateSchema,
-} = require("../validation/comment.validate");
+const commentController = require("../controller/comment.controller");
+
+router.get("/", commentController.getComments);
+router.get("/:id", commentController.getComment);
+router.post("/", commentController.createComment);
+router.put("/:id", commentController.updateComment);
+router.delete("/:id", commentController.deleteComment);
 
 /**
  * @swagger
@@ -63,10 +64,21 @@ const {
  *                   type: integer
  *                 totalPages:
  *                   type: integer
+ *             example:
+ *               data:
+ *                 - id: 1
+ *                   message: "Great product!"
+ *                   star: 5
+ *                   product_id: "550e8400-e29b-41d4-a716-446655440000"
+ *                   author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *                   createdAt: "2025-03-19T10:00:00Z"
+ *                   updatedAt: "2025-03-19T10:00:00Z"
+ *               total: 10
+ *               page: 1
+ *               totalPages: 1
  *       500:
  *         description: Server error
  */
-router.get("/", commentController.getComment);
 
 /**
  * @swagger
@@ -88,12 +100,19 @@ router.get("/", commentController.getComment);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Comment'
+ *             example:
+ *               id: 1
+ *               message: "Great product!"
+ *               star: 5
+ *               product_id: "550e8400-e29b-41d4-a716-446655440000"
+ *               author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:00:00Z"
  *       404:
  *         description: Comment not found
  *       500:
  *         description: Server error
  */
-router.get("/:id", commentController.getComment);
 
 /**
  * @swagger
@@ -106,7 +125,32 @@ router.get("/:id", commentController.getComment);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CommentInput'
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 description: Comment message
+ *               star:
+ *                 type: integer
+ *                 description: Star rating (1-5)
+ *               product_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Product ID
+ *               author_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Author ID
+ *             required:
+ *               - message
+ *               - star
+ *               - product_id
+ *               - author_id
+ *           example:
+ *             message: "Amazing quality!"
+ *             star: 4
+ *             product_id: "550e8400-e29b-41d4-a716-446655440000"
+ *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       201:
  *         description: Comment created
@@ -114,14 +158,17 @@ router.get("/:id", commentController.getComment);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Comment'
- *       400:
- *         description: Validation error
+ *             example:
+ *               id: 2
+ *               message: "Amazing quality!"
+ *               star: 4
+ *               product_id: "550e8400-e29b-41d4-a716-446655440000"
+ *               author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:00:00Z"
  *       500:
  *         description: Server error
  */
-router.post(
-  "/",  commentController.createComment
-);
 
 /**
  * @swagger
@@ -141,7 +188,32 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CommentUpdateInput'
+ *             type: object
+ *             properties:
+ *               message:
+ *                 type: string
+ *                 description: Comment message
+ *               star:
+ *                 type: integer
+ *                 description: Star rating (1-5)
+ *               product_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Product ID
+ *               author_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Author ID
+ *             required:
+ *               - message
+ *               - star
+ *               - product_id
+ *               - author_id
+ *           example:
+ *             message: "Updated: Really good!"
+ *             star: 5
+ *             product_id: "550e8400-e29b-41d4-a716-446655440000"
+ *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       200:
  *         description: Comment updated
@@ -149,16 +221,19 @@ router.post(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Comment'
- *       400:
- *         description: Validation error
+ *             example:
+ *               id: 2
+ *               message: "Updated: Really good!"
+ *               star: 5
+ *               product_id: "550e8400-e29b-41d4-a716-446655440000"
+ *               author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:05:00Z"
  *       404:
  *         description: Comment not found
  *       500:
  *         description: Server error
  */
-router.put(
-  "/:id",  commentController.updateComment
-);
 
 /**
  * @swagger
@@ -181,6 +256,5 @@ router.put(
  *       500:
  *         description: Server error
  */
-router.delete("/:id", commentController.deleteComment);
 
 module.exports = router;

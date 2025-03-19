@@ -1,20 +1,19 @@
 const Product = require("../model/product.model");
-const Category = require('../model/category.model')
-const User = require('../model/user.model')
-const Comment = require('../model/comment.model')
-
+const Category = require("../model/category.model");
+const User = require("../model/user.model");
+const Comment = require("../model/comment.model");
 const { Op } = require("sequelize");
-
+const productValidationSchema = require("../validation/product.validate");
 
 const getProducts = async (req, res) => {
   try {
     const { page, limit, sort, category_id, name, min_price, max_price } = req.query;
-    
+
     const queryOptions = {
       include: [
         { model: Category },
         { model: User },
-        { model: Comment }
+        { model: Comment },
       ],
       where: {},
       order: [],
@@ -26,25 +25,25 @@ const getProducts = async (req, res) => {
     }
 
     if (sort) {
-      queryOptions.order.push([sort, 'ASC']);
+      queryOptions.order.push([sort, "ASC"]);
     } else {
-      queryOptions.order.push(['price', 'ASC']);
+      queryOptions.order.push(["price", "ASC"]);
     }
 
-    if (category_id){
-        queryOptions.where.category_id = category_id;
-    } 
-    if (name){
-        queryOptions.where.name = { [Op.iLike]: `%${name}%` };
-    } 
+    if (category_id) {
+      queryOptions.where.category_id = category_id;
+    }
+    if (name) {
+      queryOptions.where.name = { [Op.iLike]: `%${name}%` };
+    }
     if (min_price || max_price) {
       queryOptions.where.price = {};
-      if (min_price){
+      if (min_price) {
         queryOptions.where.price[Op.gte] = parseInt(min_price);
-      } 
-      if (max_price){
+      }
+      if (max_price) {
         queryOptions.where.price[Op.lte] = parseInt(max_price);
-      } 
+      }
     }
 
     const products = await Product.findAndCountAll(queryOptions);
@@ -71,8 +70,8 @@ const getProduct = async (req, res) => {
       include: [
         { model: Category },
         { model: User },
-        { model: Comment }
-      ]
+        { model: Comment },
+      ],
     });
     if (!product) return res.status(404).json({ error: "product not found" });
     res.json(product);
@@ -83,6 +82,11 @@ const getProduct = async (req, res) => {
 
 const createProduct = async (req, res) => {
   try {
+    const { error } = productValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const product = await Product.create(req.body);
     res.status(201).json(product);
   } catch (error) {
@@ -92,6 +96,11 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   try {
+    const { error } = productValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ error: "product not found" });
     await product.update(req.body);
@@ -113,9 +122,9 @@ const deleteProduct = async (req, res) => {
 };
 
 module.exports = {
-    getProducts,
-    getProduct,
-    createProduct,
-    updateProduct,
-    deleteProduct,
-}
+  getProducts,
+  getProduct,
+  createProduct,
+  updateProduct,
+  deleteProduct,
+};

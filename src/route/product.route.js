@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Joi = require("joi");
 const productController = require("../controller/product.controller");
-const {
-  productValidationSchema,
-  productUpdateSchema,
-} = require("../validation/product.validate");
+
+router.get("/", productController.getProducts);
+router.get("/:id", productController.getProduct);
+router.post("/", productController.createProduct);
+router.put("/:id", productController.updateProduct);
+router.delete("/:id", productController.deleteProduct);
 
 /**
  * @swagger
@@ -67,10 +68,24 @@ const {
  *                   type: integer
  *                 totalPages:
  *                   type: integer
+ *             example:
+ *               data:
+ *                 - id: "550e8400-e29b-41d4-a716-446655440000"
+ *                   name: "Laptop"
+ *                   description: "High-performance laptop"
+ *                   price: 1000
+ *                   image: "http://example.com/laptop.jpg"
+ *                   star: 5
+ *                   category_id: 1
+ *                   author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *                   createdAt: "2025-03-19T10:00:00Z"
+ *                   updatedAt: "2025-03-19T10:00:00Z"
+ *               total: 20
+ *               page: 1
+ *               totalPages: 2
  *       500:
  *         description: Server error
  */
-router.get("/", productController.getProducts);
 
 /**
  * @swagger
@@ -93,12 +108,22 @@ router.get("/", productController.getProducts);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Product'
+ *             example:
+ *               id: "550e8400-e29b-41d4-a716-446655440000"
+ *               name: "Laptop"
+ *               description: "High-performance laptop"
+ *               price: 1000
+ *               image: "http://example.com/laptop.jpg"
+ *               star: 5
+ *               category_id: 1
+ *               author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:00:00Z"
  *       404:
  *         description: Product not found
  *       500:
  *         description: Server error
  */
-router.get("/:id", productController.getProduct);
 
 /**
  * @swagger
@@ -111,7 +136,46 @@ router.get("/:id", productController.getProduct);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ProductInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Product name
+ *               description:
+ *                 type: string
+ *                 description: Product description
+ *               price:
+ *                 type: integer
+ *                 description: Product price
+ *               image:
+ *                 type: string
+ *                 description: Product image URL
+ *               star:
+ *                 type: integer
+ *                 description: Star rating (1-5)
+ *               category_id:
+ *                 type: integer
+ *                 description: Category ID
+ *               author_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Author ID
+ *             required:
+ *               - name
+ *               - description
+ *               - price
+ *               - image
+ *               - star
+ *               - category_id
+ *               - author_id
+ *           example:
+ *             name: "Smartphone"
+ *             description: "Latest model smartphone"
+ *             price: 500
+ *             image: "http://example.com/smartphone.jpg"
+ *             star: 4
+ *             category_id: 1
+ *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       201:
  *         description: Product created
@@ -119,21 +183,20 @@ router.get("/:id", productController.getProduct);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Product'
- *       400:
- *         description: Validation error
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 errors:
- *                   type: array
- *                   items:
- *                     type: string
+ *             example:
+ *               id: "550e8400-e29b-41d4-a716-446655440002"
+ *               name: "Smartphone"
+ *               description: "Latest model smartphone"
+ *               price: 500
+ *               image: "http://example.com/smartphone.jpg"
+ *               star: 4
+ *               category_id: 1
+ *               author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:00:00Z"
  *       500:
  *         description: Server error
  */
-router.post("/", productController.createProduct);
 
 /**
  * @swagger
@@ -154,7 +217,46 @@ router.post("/", productController.createProduct);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/ProductUpdateInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Product name
+ *               description:
+ *                 type: string
+ *                 description: Product description
+ *               price:
+ *                 type: integer
+ *                 description: Product price
+ *               image:
+ *                 type: string
+ *                 description: Product image URL
+ *               star:
+ *                 type: integer
+ *                 description: Star rating (1-5)
+ *               category_id:
+ *                 type: integer
+ *                 description: Category ID
+ *               author_id:
+ *                 type: string
+ *                 format: uuid
+ *                 description: Author ID
+ *             required:
+ *               - name
+ *               - description
+ *               - price
+ *               - image
+ *               - star
+ *               - category_id
+ *               - author_id
+ *           example:
+ *             name: "Updated Smartphone"
+ *             description: "Updated latest model smartphone"
+ *             price: 550
+ *             image: "http://example.com/updated-smartphone.jpg"
+ *             star: 5
+ *             category_id: 1
+ *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       200:
  *         description: Product updated
@@ -162,15 +264,22 @@ router.post("/", productController.createProduct);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Product'
- *       400:
- *         description: Validation error
+ *             example:
+ *               id: "550e8400-e29b-41d4-a716-446655440002"
+ *               name: "Updated Smartphone"
+ *               description: "Updated latest model smartphone"
+ *               price: 550
+ *               image: "http://example.com/updated-smartphone.jpg"
+ *               star: 5
+ *               category_id: 1
+ *               author_id: "550e8400-e29b-41d4-a716-446655440001"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:05:00Z"
  *       404:
  *         description: Product not found
  *       500:
  *         description: Server error
  */
-router.put("/:id", productController.updateProduct);
-
 /**
  * @swagger
  * /products/{id}:
@@ -193,6 +302,5 @@ router.put("/:id", productController.updateProduct);
  *       500:
  *         description: Server error
  */
-router.delete("/:id", productController.deleteProduct);
 
 module.exports = router;

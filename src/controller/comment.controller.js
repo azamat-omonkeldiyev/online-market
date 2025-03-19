@@ -1,15 +1,16 @@
 const Comment = require("../model/comment.model");
-const Product = require('../model/product.model')
-const User = require('../model/user.model')
+const Product = require("../model/product.model");
+const User = require("../model/user.model");
+const commentValidationSchema = require("../validation/comment.validate");
 
 const getComments = async (req, res) => {
   try {
     const { page, limit, sort, product_id, min_star, max_star } = req.query;
-    
+
     const queryOptions = {
       include: [
         { model: Product },
-        { model: User }
+        { model: User },
       ],
       where: {},
       order: [],
@@ -21,22 +22,22 @@ const getComments = async (req, res) => {
     }
 
     if (sort) {
-      queryOptions.order.push([sort, 'ASC']);
+      queryOptions.order.push([sort, "ASC"]);
     } else {
-      queryOptions.order.push(['star', 'ASC']);
+      queryOptions.order.push(["star", "ASC"]);
     }
 
-    if (product_id){
-        queryOptions.where.product_id = product_id;
-    } 
+    if (product_id) {
+      queryOptions.where.product_id = product_id;
+    }
     if (min_star || max_star) {
       queryOptions.where.star = {};
-      if (min_star){
+      if (min_star) {
         queryOptions.where.star[Op.gte] = parseInt(min_star);
-      } 
-      if (max_star){
+      }
+      if (max_star) {
         queryOptions.where.star[Op.lte] = parseInt(max_star);
-      } 
+      }
     }
 
     const comments = await Comment.findAndCountAll(queryOptions);
@@ -62,12 +63,12 @@ const getComment = async (req, res) => {
     const comment = await Comment.findByPk(req.params.id, {
       include: [
         { model: Product },
-        { model: User }
-      ]
+        { model: User },
+      ],
     });
-    if (!comment){
-        return res.status(404).json({ error: "comment not found" });
-    } 
+    if (!comment) {
+      return res.status(404).json({ error: "comment not found" });
+    }
     res.json(comment);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -76,6 +77,11 @@ const getComment = async (req, res) => {
 
 const createComment = async (req, res) => {
   try {
+    const { error } = commentValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const comment = await Comment.create(req.body);
     res.status(201).json(comment);
   } catch (error) {
@@ -85,10 +91,15 @@ const createComment = async (req, res) => {
 
 const updateComment = async (req, res) => {
   try {
+    const { error } = commentValidationSchema.validate(req.body);
+    if (error) {
+      return res.status(400).json({ message: error.details[0].message });
+    }
+
     const comment = await Comment.findByPk(req.params.id);
-    if (!comment){
-        return res.status(404).json({ error: "comment not found" });
-    } 
+    if (!comment) {
+      return res.status(404).json({ error: "comment not found" });
+    }
     await comment.update(req.body);
     res.json(comment);
   } catch (error) {
@@ -99,9 +110,9 @@ const updateComment = async (req, res) => {
 const deleteComment = async (req, res) => {
   try {
     const comment = await Comment.findByPk(req.params.id);
-    if (!comment){
-        return res.status(404).json({ error: "comment not found" });
-    } 
+    if (!comment) {
+      return res.status(404).json({ error: "comment not found" });
+    }
     await comment.destroy();
     res.status(204).send();
   } catch (error) {
@@ -110,9 +121,9 @@ const deleteComment = async (req, res) => {
 };
 
 module.exports = {
-    getComments,
-    getComment,
-    createComment,
-    updateComment,
-    deleteComment,
-}
+  getComments,
+  getComment,
+  createComment,
+  updateComment,
+  deleteComment,
+};
