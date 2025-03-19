@@ -1,4 +1,4 @@
-const {db , DataTypes} = require("./../config/db");
+const {db , DataTypes} = require("../config/db");
 const Region = require("./region.model");
 
 const User = db.define(
