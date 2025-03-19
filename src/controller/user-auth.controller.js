@@ -157,21 +157,36 @@ const verify = async (req, res) => {
 
 // Get All Users
 const getUsers = async (req, res) => {
-  try {
-    const users = await User.findAll({
-      include: { model: Region },
-    });
-    res.status(200).json(users);
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: err.message });
-  }
-};
-
+    try {
+      const { region_id, page = 1, limit = 10, sort = "ASC" } = req.query; // Querydan filter, pagination, sort olish
+  
+      const whereCondition = region_id ? { region_id } : {}; // Region bo‘yicha filter
+  
+      const users = await User.findAndCountAll({
+        where: whereCondition,
+        include: { model: Region },
+        limit: parseInt(limit),
+        offset: (parseInt(page) - 1) * parseInt(limit),
+        order: [["name", sort.toUpperCase()]], // Ism bo‘yicha sort
+      });
+  
+      res.status(200).json({
+        total: users.count,
+        page: parseInt(page),
+        data: users.rows,
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    }
+  };
+  
 // Get User by ID
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id);
+    const user = await User.findByPk(req.params.id,{
+        include: {model: Region}
+    });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
     }

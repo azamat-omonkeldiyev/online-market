@@ -1,6 +1,6 @@
 const Region = require("./../model/region.model");
 
-//  Yangi region qo'shish
+//  Yangi region qo'shish (Create)
 const createRegion = async (req, res) => {
     try {
         const { name } = req.body;
@@ -13,30 +13,41 @@ const createRegion = async (req, res) => {
     }
 };
 
-//  Barcha regionlarni olish (ID bo'yicha qidirish va pagination qo'shildi)
+//  Barcha regionlarni olish (Read All + Pagination)
 const getAllRegions = async (req, res) => {
     try {
-        const { id, page = 1, limit = 10 } = req.query;
-        const whereCondition = id ? { id } : {};
+        const { page = 1, limit = 10 } = req.query;
 
         const regions = await Region.findAndCountAll({
-            where: whereCondition,
             limit: parseInt(limit),
-            offset: (parseInt(page) - 1) * parseInt(limit)
+            offset: (parseInt(page) - 1) * parseInt(limit),
         });
 
         res.status(200).json({
             total: regions.count,
             page: parseInt(page),
-            totalPages: Math.ceil(regions.count / parseInt(limit)),
-            data: regions.rows
+            data: regions.rows,
         });
     } catch (error) {
         res.status(500).json({ message: "Server xatosi", error: error.message });
     }
 };
 
-// Regionni yangilash
+//  ID bo‘yicha regionni olish (Read One)
+const getRegionById = async (req, res) => {
+    try {
+        const { id } = req.params;
+
+        const region = await Region.findByPk(id);
+        if (!region) return res.status(404).json({ message: "Region not found" });
+
+        res.status(200).json(region);
+    } catch (error) {
+        res.status(500).json({ message: "Server xatosi", error: error.message });
+    }
+};
+
+//  Regionni yangilash (Update)
 const updateRegion = async (req, res) => {
     try {
         const { id } = req.params;
@@ -54,7 +65,7 @@ const updateRegion = async (req, res) => {
     }
 };
 
-// Regionni o'chirish
+//  Regionni o'chirish (Delete)
 const deleteRegion = async (req, res) => {
     try {
         const { id } = req.params;
@@ -71,6 +82,7 @@ const deleteRegion = async (req, res) => {
 module.exports = {
     createRegion,
     getAllRegions,
+    getRegionById,
     updateRegion,
     deleteRegion,
 };
