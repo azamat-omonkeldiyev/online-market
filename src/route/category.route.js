@@ -1,22 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const Joi = require("joi");
 const categoryController = require("../controller/category.controller");
-const {
-  categoryValidationSchema,
-  categoryUpdateSchema,
-} = require("../validation/category.validate");
 
-const validateRequest = (schema) => {
-  return (req, res, next) => {
-    const { error } = schema.validate(req.body, { abortEarly: false });
-    if (error) {
-      const errorMessages = error.details.map((detail) => detail.message);
-      return res.status(400).json({ errors: errorMessages });
-    }
-    next();
-  };
-};
+router.get("/", categoryController.getCategories);
+router.get("/:id", categoryController.getCategory);
+router.post("/", categoryController.createCategory);
+router.put("/:id", categoryController.updateCategory);
+router.delete("/:id", categoryController.deleteCategory);
 
 /**
  * @swagger
@@ -63,10 +53,18 @@ const validateRequest = (schema) => {
  *                   type: integer
  *                 totalPages:
  *                   type: integer
+ *             example:
+ *               data:
+ *                 - id: 1
+ *                   name: "Electronics"
+ *                   createdAt: "2025-03-19T10:00:00Z"
+ *                   updatedAt: "2025-03-19T10:00:00Z"
+ *               total: 5
+ *               page: 1
+ *               totalPages: 1
  *       500:
  *         description: Server error
  */
-router.get("/", categoryController.getCategories);
 
 /**
  * @swagger
@@ -88,12 +86,16 @@ router.get("/", categoryController.getCategories);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Category'
+ *             example:
+ *               id: 1
+ *               name: "Electronics"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:00:00Z"
  *       404:
  *         description: Category not found
  *       500:
  *         description: Server error
  */
-router.get("/:id", categoryController.getCategory);
 
 /**
  * @swagger
@@ -106,7 +108,15 @@ router.get("/:id", categoryController.getCategory);
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CategoryInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the category
+ *             required:
+ *               - name
+ *           example:
+ *             name: "Books"
  *     responses:
  *       201:
  *         description: Category created
@@ -114,16 +124,14 @@ router.get("/:id", categoryController.getCategory);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Category'
- *       400:
- *         description: Validation error
+ *             example:
+ *               id: 2
+ *               name: "Books"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:00:00Z"
  *       500:
  *         description: Server error
  */
-router.post(
-  "/",
-  validateRequest(categoryValidationSchema),
-  categoryController.createCategory
-);
 
 /**
  * @swagger
@@ -143,7 +151,15 @@ router.post(
  *       content:
  *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/CategoryUpdateInput'
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Name of the category
+ *             required:
+ *               - name
+ *           example:
+ *             name: "Updated Books"
  *     responses:
  *       200:
  *         description: Category updated
@@ -151,18 +167,16 @@ router.post(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/Category'
- *       400:
- *         description: Validation error
+ *             example:
+ *               id: 2
+ *               name: "Updated Books"
+ *               createdAt: "2025-03-19T10:00:00Z"
+ *               updatedAt: "2025-03-19T10:05:00Z"
  *       404:
  *         description: Category not found
  *       500:
  *         description: Server error
  */
-router.put(
-  "/:id",
-  validateRequest(categoryUpdateSchema),
-  categoryController.updateCategory
-);
 
 /**
  * @swagger
@@ -185,6 +199,5 @@ router.put(
  *       500:
  *         description: Server error
  */
-router.delete("/:id", categoryController.deleteCategory);
 
 module.exports = router;
