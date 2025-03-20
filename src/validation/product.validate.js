@@ -55,14 +55,7 @@ const productValidationSchema = Joi.object({
       "number.base": "Category ID must be a number",
       "number.integer": "Category ID must be an integer",
       "any.required": "Category ID is required",
-    }),
-  author_id: Joi.string()
-    .uuid()
-    .required()
-    .messages({
-      "string.uuid": "Author ID must be a valid UUID",
-      "string.empty": "Author ID is required",
-    }),
+    })
 }).strict();
 
 module.exports = productValidationSchema;

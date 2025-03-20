@@ -7,7 +7,7 @@ const User = require("../model/user.model");
 const createOrder = async (req, res) => {
   try {
     const { items } = req.body;
-    const user_id  = "42eb12f0-a6b5-49f4-8014-cb462cf74872";
+    const user_id  = req.userId;
     if (!user_id) return res.status(400).json({ message: "User ID is required" });
 
     const userExists = await User.findByPk(user_id);

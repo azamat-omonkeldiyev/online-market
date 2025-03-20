@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const productController = require("../controller/product.controller");
+const roleMiddleware = require("../rolemiddleware/roleAuth");
 
 router.get("/", productController.getProducts);
 router.get("/:id", productController.getProduct);
-router.post("/", productController.createProduct);
-router.put("/:id", productController.updateProduct);
-router.delete("/:id", productController.deleteProduct);
+router.post("/",roleMiddleware(["seller", "admin"]), productController.createProduct);
+router.patch("/:id",roleMiddleware(["seller", "admin","superadmin"]), productController.updateProduct);
+router.delete("/:id",roleMiddleware(["seller", "admin"]), productController.deleteProduct);
 
 /**
  * @swagger
@@ -127,7 +128,6 @@ router.delete("/:id", productController.deleteProduct);
  *             image: "http://example.com/smartphone.jpg"
  *             star: 4
  *             category_id: 1
- *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       201:
  *         description: Product created
@@ -151,7 +151,7 @@ router.delete("/:id", productController.deleteProduct);
 /**
  * @swagger
  * /products/{id}:
- *   put:
+ *   patch:
  *     summary: Update a product
  *     tags: [Products]
  *     parameters:
@@ -173,7 +173,6 @@ router.delete("/:id", productController.deleteProduct);
  *             image: "http://example.com/updated-smartphone.jpg"
  *             star: 5
  *             category_id: 1
- *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       200:
  *         description: Product updated

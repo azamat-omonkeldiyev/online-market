@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const categoryController = require("../controller/category.controller");
+const roleMiddleware = require("../rolemiddleware/roleAuth");
 
 router.get("/", categoryController.getCategories);
 router.get("/:id", categoryController.getCategory);
-router.post("/", categoryController.createCategory);
-router.put("/:id", categoryController.updateCategory);
-router.delete("/:id", categoryController.deleteCategory);
+router.post("/",roleMiddleware(["admin"]), categoryController.createCategory);
+router.patch("/:id",roleMiddleware(["admin", "superadmin"]), categoryController.updateCategory);
+router.delete("/:id",roleMiddleware(["admin"]), categoryController.deleteCategory);
 
 /**
  * @swagger
@@ -111,7 +112,7 @@ router.delete("/:id", categoryController.deleteCategory);
 /**
  * @swagger
  * /categories/{id}:
- *   put:
+ *   patch:
  *     summary: Update a category
  *     tags: [Categories]
  *     parameters:

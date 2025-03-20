@@ -28,14 +28,7 @@ const commentValidationSchema = Joi.object({
     .messages({
       "string.uuid": "Product ID must be a valid UUID",
       "string.empty": "Product ID is required",
-    }),
-  author_id: Joi.string()
-    .uuid()
-    .required()
-    .messages({
-      "string.uuid": "Author ID must be a valid UUID",
-      "string.empty": "Author ID is required",
-    }),
+    })
 }).strict();
 
 module.exports = commentValidationSchema;
