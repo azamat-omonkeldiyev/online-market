@@ -11,7 +11,6 @@ const roleMiddleware = (roles) => {
     
         try {
             let data = jwt.verify(token, process.env.JWT_SECRET);
-            console.log()
             if(roles.includes(data.role)){
                 req.userId = data.id;
                 req.userRole = data.role 

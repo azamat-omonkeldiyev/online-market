@@ -8,7 +8,8 @@ const {
   getUsers,
   getUserById,
   updateUser,
-  deleteUser
+  deleteUser,
+  me
 } = require("./../controller/user-auth.controller");
 const roleMiddleware = require("../rolemiddleware/roleAuth");
 
@@ -194,6 +195,23 @@ router.post("/refresh", refresh);
 
 /**
  * @swagger
+ * /users/me:
+ *   get:
+ *     summary: Get the current user's information
+ *     description: Retrieves the details of the currently authenticated user.
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user data
+ *       401:
+ *         description: Unauthorized, missing or invalid token
+ *       500:
+ *         description: Server error
+ */
+router.get("/me",roleMiddleware(["admin","superadmin","seller","user"]), me);
+
+/**
+ * @swagger
  * /users:
  *   get:
  *     summary: Get all users with pagination and filtering
@@ -249,6 +267,8 @@ router.get("/",roleMiddleware(["admin"]), getUsers);
  *         description: User not found
  */
 router.get("/:id", getUserById);
+
+
 
 /**
  * @swagger

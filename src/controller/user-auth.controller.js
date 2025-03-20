@@ -49,11 +49,9 @@ const register = async (req, res) => {
 
     let usernameFound = await User.findOne({ where: { name } });
     if (usernameFound) {
-      return res
-        .status(400)
-        .json({
-          message: "Username already exists. Please change your username..",
-        });
+      return res.status(400).json({
+        message: "Username already exists. Please change your username..",
+      });
     }
 
     let region = await Region.findByPk(region_id);
@@ -105,20 +103,29 @@ const login = async (req, res) => {
 const sendOtp = async (req, res) => {
   try {
     let { email, phone } = req.body;
-    if(!email || !phone){
-        return res.status(400).json({message: "please enter the phone and email"})
-    };
+    if (!email || !phone) {
+      return res
+        .status(400)
+        .json({ message: "please enter the phone and email" });
+    }
 
-    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) 
-        return res.status(400).json({ message: "the format of email is incorrect" });
-  
-    if (phone && !/^\d{9}$/.test(phone)) 
-        return res.status(400).json({ message: "the amount of numbers should be at least 9(example: 936005412)" });
-    
-    if (email && await User.findOne({ where: { email } })) 
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return res
+        .status(400)
+        .json({ message: "the format of email is incorrect" });
+
+    if (phone && !/^\d{9}$/.test(phone))
+      return res
+        .status(400)
+        .json({
+          message:
+            "the amount of numbers should be at least 9(example: 936005412)",
+        });
+
+    if (email && (await User.findOne({ where: { email } })))
       return res.status(409).json({ message: "Email already exists" });
 
-    if (phone && await User.findOne({ where: { phone } })) 
+    if (phone && (await User.findOne({ where: { phone } })))
       return res.status(409).json({ message: "Phone already exists" });
 
     const token = totp.generate(email + process.env.TOTP_SECRET);
@@ -126,9 +133,7 @@ const sendOtp = async (req, res) => {
 
     // await sendSms(phone,token);
     await sendEmail(email, token);
-    return res.json(
-      `The otp is sent to your email and phone.[${token}]`
-    );
+    return res.json(`The otp is sent to your email and phone.[${token}]`);
   } catch (error) {
     console.log(error);
     res.status(500).json({ err: error.message });
@@ -157,35 +162,35 @@ const verify = async (req, res) => {
 
 // Get All Users
 const getUsers = async (req, res) => {
-    try {
-      const { region_id, page = 1, limit = 10, sort = "ASC" } = req.query; 
-  
-      const whereCondition = region_id ? { region_id } : {}; 
-  
-      const users = await User.findAndCountAll({
-        where: whereCondition,
-        include: { model: Region },
-        limit: parseInt(limit),
-        offset: (parseInt(page) - 1) * parseInt(limit),
-        order: [["name", sort.toUpperCase()]],
-      });
-  
-      res.status(200).json({
-        total: users.count,
-        page: parseInt(page),
-        data: users.rows,
-      });
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ error: err.message });
-    }
-  };
-  
+  try {
+    const { region_id, page = 1, limit = 10, sort = "ASC" } = req.query;
+
+    const whereCondition = region_id ? { region_id } : {};
+
+    const users = await User.findAndCountAll({
+      where: whereCondition,
+      include: { model: Region },
+      limit: parseInt(limit),
+      offset: (parseInt(page) - 1) * parseInt(limit),
+      order: [["name", sort.toUpperCase()]],
+    });
+
+    res.status(200).json({
+      total: users.count,
+      page: parseInt(page),
+      data: users.rows,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Get User by ID
 const getUserById = async (req, res) => {
   try {
-    const user = await User.findByPk(req.params.id,{
-        include: {model: Region}
+    const user = await User.findByPk(req.params.id, {
+      include: { model: Region },
     });
     if (!user) {
       return res.status(404).json({ error: "User not found" });
@@ -198,6 +203,16 @@ const getUserById = async (req, res) => {
 };
 
 // Me
+const me = async (req, res) => {
+  try {
+    console.log(req.userId);
+    let data = await User.findByPk(req.userId, { include: Region });
+    res.json(data);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
 // get refresh token
 const refresh = async (req, res) => {
   try {
@@ -229,7 +244,7 @@ const updateUser = async (req, res) => {
     await user.update(req.body);
     res.status(200).json(user);
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -244,7 +259,7 @@ const deleteUser = async (req, res) => {
     await user.destroy();
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -259,4 +274,5 @@ module.exports = {
   getUserById,
   updateUser,
   deleteUser,
+  me,
 };
