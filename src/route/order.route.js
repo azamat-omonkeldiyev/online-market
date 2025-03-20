@@ -130,8 +130,8 @@ router.get("/",roleMiddleware(["admin"]), getAllOrders);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           example: 1 
  *         description: Order ID
  *     responses:
  *       200:
