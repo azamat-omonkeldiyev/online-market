@@ -228,6 +228,7 @@ const updateUser = async (req, res) => {
     await user.update(req.body);
     res.status(200).json(user);
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err.message });
   }
 };
@@ -242,6 +243,7 @@ const deleteUser = async (req, res) => {
     await user.destroy();
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err.message });
   }
 };

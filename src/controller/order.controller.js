@@ -73,6 +73,7 @@ const getOrderById = async (req, res) => {
 
     res.json(order);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };
@@ -100,6 +101,7 @@ const updateOrder = async (req, res) => {
 
     res.json({ order });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };
@@ -116,6 +118,7 @@ const deleteOrder = async (req, res) => {
 
     res.json({ message: "Order and its items deleted successfully" });
   } catch (error) {
+    console.log(error)
     res.status(500).json({ error: error.message });
   }
 };

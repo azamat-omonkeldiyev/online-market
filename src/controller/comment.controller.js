@@ -55,6 +55,7 @@ const getComments = async (req, res) => {
 
     res.json(response);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -72,6 +73,7 @@ const getComment = async (req, res) => {
     }
     res.json(comment);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -90,6 +92,7 @@ const createComment = async (req, res) => {
     });
     res.status(201).json(comment);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -112,6 +115,7 @@ const updateComment = async (req, res) => {
     });
     res.json(comment);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -125,6 +129,7 @@ const deleteComment = async (req, res) => {
     await comment.destroy();
     res.status(204).send();
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };

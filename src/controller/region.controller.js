@@ -9,6 +9,7 @@ const createRegion = async (req, res) => {
         const region = await Region.create({ name });
         res.status(201).json({ region });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "server error", error: error.message });
     }
 };
@@ -29,6 +30,7 @@ const getAllRegions = async (req, res) => {
             data: regions.rows,
         });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ message: "server error", error: error.message });
     }
 };
@@ -43,6 +45,7 @@ const getRegionById = async (req, res) => {
 
         res.status(200).json(region);
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: error.message });
     }
 };
@@ -61,6 +64,7 @@ const updateRegion = async (req, res) => {
 
         res.status(200).json({ region });
     } catch (error) {
+        console.log(error)
         res.status(500).json({ error: error.message });
     }
 };
@@ -75,6 +79,7 @@ const deleteRegion = async (req, res) => {
         await region.destroy();
         res.status(200).json({ message: "Region deleted" });
     } catch (error) {
+        console.log(error)
         res.status(500).json({  error: error.message });
     }
 };
