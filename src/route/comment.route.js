@@ -51,19 +51,6 @@ router.delete("/:id", commentController.deleteComment);
  *         description: List of comments
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Comment'
- *                 total:
- *                   type: integer
- *                 page:
- *                   type: integer
- *                 totalPages:
- *                   type: integer
  *             example:
  *               data:
  *                 - id: 1
@@ -98,8 +85,6 @@ router.delete("/:id", commentController.deleteComment);
  *         description: Comment details
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Comment'
  *             example:
  *               id: 1
  *               message: "Great product!"
@@ -124,28 +109,6 @@ router.delete("/:id", commentController.deleteComment);
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               message:
- *                 type: string
- *                 description: Comment message
- *               star:
- *                 type: integer
- *                 description: Star rating (1-5)
- *               product_id:
- *                 type: string
- *                 format: uuid
- *                 description: Product ID
- *               author_id:
- *                 type: string
- *                 format: uuid
- *                 description: Author ID
- *             required:
- *               - message
- *               - star
- *               - product_id
- *               - author_id
  *           example:
  *             message: "Amazing quality!"
  *             star: 4
@@ -156,8 +119,6 @@ router.delete("/:id", commentController.deleteComment);
  *         description: Comment created
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Comment'
  *             example:
  *               id: 2
  *               message: "Amazing quality!"
@@ -187,28 +148,6 @@ router.delete("/:id", commentController.deleteComment);
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               message:
- *                 type: string
- *                 description: Comment message
- *               star:
- *                 type: integer
- *                 description: Star rating (1-5)
- *               product_id:
- *                 type: string
- *                 format: uuid
- *                 description: Product ID
- *               author_id:
- *                 type: string
- *                 format: uuid
- *                 description: Author ID
- *             required:
- *               - message
- *               - star
- *               - product_id
- *               - author_id
  *           example:
  *             message: "Updated: Really good!"
  *             star: 5
@@ -219,8 +158,6 @@ router.delete("/:id", commentController.deleteComment);
  *         description: Comment updated
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Comment'
  *             example:
  *               id: 2
  *               message: "Updated: Really good!"

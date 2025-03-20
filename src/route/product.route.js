@@ -55,19 +55,6 @@ router.delete("/:id", productController.deleteProduct);
  *         description: List of products
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Product'
- *                 total:
- *                   type: integer
- *                 page:
- *                   type: integer
- *                 totalPages:
- *                   type: integer
  *             example:
  *               data:
  *                 - id: "550e8400-e29b-41d4-a716-446655440000"
@@ -106,8 +93,6 @@ router.delete("/:id", productController.deleteProduct);
  *         description: Product details
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Product'
  *             example:
  *               id: "550e8400-e29b-41d4-a716-446655440000"
  *               name: "Laptop"
@@ -135,39 +120,6 @@ router.delete("/:id", productController.deleteProduct);
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Product name
- *               description:
- *                 type: string
- *                 description: Product description
- *               price:
- *                 type: integer
- *                 description: Product price
- *               image:
- *                 type: string
- *                 description: Product image URL
- *               star:
- *                 type: integer
- *                 description: Star rating (1-5)
- *               category_id:
- *                 type: integer
- *                 description: Category ID
- *               author_id:
- *                 type: string
- *                 format: uuid
- *                 description: Author ID
- *             required:
- *               - name
- *               - description
- *               - price
- *               - image
- *               - star
- *               - category_id
- *               - author_id
  *           example:
  *             name: "Smartphone"
  *             description: "Latest model smartphone"
@@ -181,8 +133,6 @@ router.delete("/:id", productController.deleteProduct);
  *         description: Product created
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Product'
  *             example:
  *               id: "550e8400-e29b-41d4-a716-446655440002"
  *               name: "Smartphone"
@@ -216,39 +166,6 @@ router.delete("/:id", productController.deleteProduct);
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Product name
- *               description:
- *                 type: string
- *                 description: Product description
- *               price:
- *                 type: integer
- *                 description: Product price
- *               image:
- *                 type: string
- *                 description: Product image URL
- *               star:
- *                 type: integer
- *                 description: Star rating (1-5)
- *               category_id:
- *                 type: integer
- *                 description: Category ID
- *               author_id:
- *                 type: string
- *                 format: uuid
- *                 description: Author ID
- *             required:
- *               - name
- *               - description
- *               - price
- *               - image
- *               - star
- *               - category_id
- *               - author_id
  *           example:
  *             name: "Updated Smartphone"
  *             description: "Updated latest model smartphone"
@@ -262,8 +179,6 @@ router.delete("/:id", productController.deleteProduct);
  *         description: Product updated
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Product'
  *             example:
  *               id: "550e8400-e29b-41d4-a716-446655440002"
  *               name: "Updated Smartphone"
@@ -280,6 +195,7 @@ router.delete("/:id", productController.deleteProduct);
  *       500:
  *         description: Server error
  */
+
 /**
  * @swagger
  * /products/{id}:

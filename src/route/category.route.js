@@ -40,19 +40,6 @@ router.delete("/:id", categoryController.deleteCategory);
  *         description: List of categories
  *         content:
  *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 data:
- *                   type: array
- *                   items:
- *                     $ref: '#/components/schemas/Category'
- *                 total:
- *                   type: integer
- *                 page:
- *                   type: integer
- *                 totalPages:
- *                   type: integer
  *             example:
  *               data:
  *                 - id: 1
@@ -84,8 +71,6 @@ router.delete("/:id", categoryController.deleteCategory);
  *         description: Category details
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Category'
  *             example:
  *               id: 1
  *               name: "Electronics"
@@ -107,14 +92,6 @@ router.delete("/:id", categoryController.deleteCategory);
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the category
- *             required:
- *               - name
  *           example:
  *             name: "Books"
  *     responses:
@@ -122,8 +99,6 @@ router.delete("/:id", categoryController.deleteCategory);
  *         description: Category created
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Category'
  *             example:
  *               id: 2
  *               name: "Books"
@@ -150,14 +125,6 @@ router.delete("/:id", categoryController.deleteCategory);
  *       required: true
  *       content:
  *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *                 description: Name of the category
- *             required:
- *               - name
  *           example:
  *             name: "Updated Books"
  *     responses:
@@ -165,8 +132,6 @@ router.delete("/:id", categoryController.deleteCategory);
  *         description: Category updated
  *         content:
  *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/Category'
  *             example:
  *               id: 2
  *               name: "Updated Books"
