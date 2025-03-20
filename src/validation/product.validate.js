@@ -36,18 +36,6 @@ const productValidationSchema = Joi.object({
       "string.uri": "Image must be a valid URL",
       "string.empty": "Image is required",
     }),
-  star: Joi.number()
-    .integer()
-    .min(1)
-    .max(5)
-    .required()
-    .messages({
-      "number.base": "Star rating must be a number",
-      "number.integer": "Star rating must be an integer",
-      "number.min": "Star rating must be at least 1",
-      "number.max": "Star rating cannot exceed 5",
-      "any.required": "Star rating is required",
-    }),
   category_id: Joi.number()
     .integer()
     .required()

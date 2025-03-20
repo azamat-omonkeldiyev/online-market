@@ -126,7 +126,6 @@ router.delete("/:id",roleMiddleware(["seller", "admin"]), productController.dele
  *             description: "Latest model smartphone"
  *             price: 500
  *             image: "http://example.com/smartphone.jpg"
- *             star: 4
  *             category_id: 1
  *     responses:
  *       201:

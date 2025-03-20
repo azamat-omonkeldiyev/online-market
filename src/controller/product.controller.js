@@ -88,6 +88,7 @@ const createProduct = async (req, res) => {
     let {...rest} = req.body;
     const product = await Product.create({
       ...rest,
+      star: 4,
       author_id: req.userId
     });
     res.status(201).json(product);
