@@ -80,7 +80,7 @@ const login = async (req, res) => {
   try {
     let { name, password } = req.body;
     if (!name || !password) {
-      return res.status(400).json("username va password kiriting!...");
+      return res.status(400).json("please enter name and password...");
     }
 
     let user = await User.findOne({ where: { name } });
@@ -106,14 +106,14 @@ const sendOtp = async (req, res) => {
   try {
     let { email, phone } = req.body;
     if(!email || !phone){
-        return res.status(400).json({message: "email va phone ni kiriting"})
+        return res.status(400).json({message: "please enter the phone and email"})
     };
 
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) 
-        return res.status(400).json({ message: "Email noto‘g‘ri formatda" });
+        return res.status(400).json({ message: "the format of email is incorrect" });
   
     if (phone && !/^\d{9}$/.test(phone)) 
-        return res.status(400).json({ message: "Telefon raqami 9 xonali bo‘lishi kerak (masalan: 936005412)" });
+        return res.status(400).json({ message: "the amount of numbers should be at least 9(example: 936005412)" });
     
     if (email && await User.findOne({ where: { email } })) 
       return res.status(409).json({ message: "Email already exists" });
@@ -127,7 +127,7 @@ const sendOtp = async (req, res) => {
     // await sendSms(phone,token);
     await sendEmail(email, token);
     return res.json(
-      `Email pochtangizga va telefon raqamingizga parol yuborildi.[${token}]`
+      `The otp is sent to your email and phone.[${token}]`
     );
   } catch (error) {
     console.log(error);
@@ -204,7 +204,7 @@ const refresh = async (req, res) => {
     let { refresh_token } = req.body;
 
     if (!refresh_token)
-      return res.status(400).json("refresh_token not provided");
+      return res.status(400).json("refresh_token is not provided");
 
     let data = jwt.verify(refresh_token, "secret_boshqa");
     let token = genToken(data.id);
@@ -229,6 +229,7 @@ const updateUser = async (req, res) => {
     await user.update(req.body);
     res.status(200).json(user);
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err.message });
   }
 };
@@ -243,6 +244,7 @@ const deleteUser = async (req, res) => {
     await user.destroy();
     res.status(200).json({ message: "User deleted successfully" });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err.message });
   }
 };

@@ -59,6 +59,7 @@ const getProducts = async (req, res) => {
 
     res.json(response);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -74,6 +75,7 @@ const getProduct = async (req, res) => {
     if (!product) return res.status(404).json({ error: "product not found" });
     res.json(product);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -93,6 +95,7 @@ const createProduct = async (req, res) => {
     });
     res.status(201).json(product);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -113,6 +116,7 @@ const updateProduct = async (req, res) => {
     });
     res.json(product);
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
@@ -125,6 +129,7 @@ const deleteProduct = async (req, res) => {
     await product.destroy();
     res.status(200).json({message: "deleted successfully"});
   } catch (error) {
+    console.log(error)
     res.status(500).json({ message: error.message });
   }
 };
