@@ -15,10 +15,9 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-app.use("/user", UserRoute);
-app.use("/product", productRoute);
-app.use("/comment", commentRoute);
-app.use("/category", categoryRoute);
+app.use("/products", productRoute);
+app.use("/comments", commentRoute);
+app.use("/categories", categoryRoute);
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/users", UserRoute);
