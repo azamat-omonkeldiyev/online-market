@@ -78,6 +78,28 @@ const getOrderById = async (req, res) => {
   }
 };
 
+const getMyOrders = async (req, res) => {
+  try {
+    const user_id = req.userId; // Middleware orqali kelayotgan foydalanuvchi ID
+    if (!user_id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+
+    const orders = await Order.findAll({
+      where: { user_id },
+      include: [
+        { model: OrderItem, attributes: ["id","order_id"], include: [{ model: Product, attributes: ["id", "name", "price"] }] },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Buyurtmani yangilash (Update)
 const updateOrder = async (req, res) => {
   try {
@@ -123,4 +145,4 @@ const deleteOrder = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getAllOrders, getOrderById, updateOrder, deleteOrder };
+module.exports = { createOrder, getAllOrders, getOrderById, updateOrder, deleteOrder, getMyOrders };

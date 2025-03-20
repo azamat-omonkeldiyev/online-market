@@ -5,6 +5,7 @@ const {
   getOrderById,
   updateOrder,
   deleteOrder,
+  getMyOrders,
 } = require("../controller/order.controller");
 const roleMiddleware = require("../rolemiddleware/roleAuth");
 
@@ -118,6 +119,58 @@ router.post("/",roleMiddleware(["admin", "seller", "user"]), createOrder);
  *         description: Internal server error
  */
 router.get("/",roleMiddleware(["admin"]), getAllOrders);
+
+/**
+ * @swagger
+ * /orders/my-orders:
+ *   get:
+ *     summary: Get orders belonging to the authenticated user
+ *     description: Retrieves all orders associated with the currently authenticated user.
+ *     tags:
+ *       - Orders
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved user orders
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 orders:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       id:
+ *                         type: integer
+ *                         example: 1
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *                         example: "2024-03-20T12:00:00Z"
+ *                       orderItems:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             product:
+ *                               type: object
+ *                               properties:
+ *                                 id:
+ *                                   type: integer
+ *                                   example: 10
+ *                                 name:
+ *                                   type: string
+ *                                   example: "Smartphone"
+ *                                 price:
+ *                                   type: number
+ *                                   example: 299.99
+ *       401:
+ *         description: Unauthorized, missing or invalid token
+ *       500:
+ *         description: Server error
+ */
+router.get("/my-orders",roleMiddleware(["admin","seller","superadmin","user"]), getMyOrders);
 
 /**
  * @swagger
