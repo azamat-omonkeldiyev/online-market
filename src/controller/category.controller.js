@@ -24,7 +24,7 @@ const getCategories = async (req, res) => {
     }
 
     if (name) {
-      queryOptions.where.name = { [Op.iLike]: `%${name}%` };
+      queryOptions.where.name = { [Op.like]: `%${name}%` };
     }
 
     const categories = await Category.findAndCountAll(queryOptions);

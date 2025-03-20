@@ -1,6 +1,7 @@
 const Comment = require("../model/comment.model");
 const Product = require("../model/product.model");
 const User = require("../model/user.model");
+const {Op} = require("sequelize");
 const commentValidationSchema = require("../validation/comment.validate");
 
 const getComments = async (req, res) => {
@@ -9,8 +10,8 @@ const getComments = async (req, res) => {
 
     const queryOptions = {
       include: [
-        { model: Product },
-        { model: User },
+        { model: Product, attributes: ["id", "name"] },
+        { model: User, attributes: ["id", "name"] },
       ],
       where: {},
       order: [],
@@ -62,8 +63,8 @@ const getComment = async (req, res) => {
   try {
     const comment = await Comment.findByPk(req.params.id, {
       include: [
-        { model: Product },
-        { model: User },
+        { model: Product, attributes: ["id", "name"] },
+        { model: User,attributes: ["id", "name"] },
       ],
     });
     if (!comment) {

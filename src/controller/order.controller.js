@@ -6,7 +6,7 @@ const User = require("../model/user.model");
 const createOrder = async (req, res) => {
   try {
     const { items } = req.body;
-    const { user_id } = req.UserId;
+    const user_id  = "42eb12f0-a6b5-49f4-8014-cb462cf74872";
     if (!user_id) return res.status(400).json({ message: "User ID is required" });
 
     const userExists = await User.findByPk(user_id);
@@ -48,6 +48,7 @@ const getAllOrders = async (req, res) => {
       data: orders.rows,
     });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -86,7 +87,7 @@ const updateOrder = async (req, res) => {
       await OrderItem.bulkCreate(newOrderItems);
     }
 
-    res.json({ message: "Order updated successfully", order });
+    res.json({ order });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

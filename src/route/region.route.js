@@ -44,11 +44,6 @@ router.post("/", createRegion);
  *     tags: [Regions]
  *     parameters:
  *       - in: query
- *         name: id
- *         schema:
- *           type: string
- *         description: Filter by region ID
- *       - in: query
  *         name: page
  *         schema:
  *           type: integer

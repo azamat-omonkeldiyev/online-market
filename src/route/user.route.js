@@ -65,7 +65,7 @@ const router = express.Router();
  *                 type: integer
  *                 example: 1995
  *               region_id:
- *                 type: string
+ *                 type: integer
  *                 example: 1
  *     responses:
  *       201:
@@ -126,7 +126,7 @@ router.post("/login", login);
  *                 example: "user@example.com"
  *               phone:
  *                 type: string
- *                 example: "+998901234567"
+ *                 example: "901234567"
  *     responses:
  *       200:
  *         description: OTP sent successfully

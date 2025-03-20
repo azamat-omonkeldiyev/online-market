@@ -11,7 +11,7 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:4000", 
+        url: "http://localhost:4000",
       },
     ],
     components: {
@@ -22,10 +22,28 @@ const options = {
           bearerFormat: "JWT",
         },
       },
+      schemas: {
+        Product: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: 1 },
+            name: { type: "string", example: "Laptop" },
+            price: { type: "number", example: 999.99 },
+          },
+        },
+        Comment: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: 1 },
+            text: { type: "string", example: "Great product!" },
+            productId: { type: "integer", example: 1 },
+          },
+        },
+      },
     },
-    security: [{ bearerAuth: [] }], 
+    security: [{ bearerAuth: [] }],
   },
-  apis: ["./src/route/*.js"], 
+  apis: ["./src/route/*.js"],
 };
 
 const specs = swaggerJsDoc(options);

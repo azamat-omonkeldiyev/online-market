@@ -7,7 +7,7 @@ const createRegion = async (req, res) => {
         if (!name) return res.status(400).json({ message: "Region name is required" });
 
         const region = await Region.create({ name });
-        res.status(201).json({ message: "Region created", region });
+        res.status(201).json({ region });
     } catch (error) {
         res.status(500).json({ message: "Server xatosi", error: error.message });
     }
@@ -43,7 +43,7 @@ const getRegionById = async (req, res) => {
 
         res.status(200).json(region);
     } catch (error) {
-        res.status(500).json({ message: "Server xatosi", error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 
@@ -59,9 +59,9 @@ const updateRegion = async (req, res) => {
         region.name = name || region.name;
         await region.save();
 
-        res.status(200).json({ message: "Region updated", region });
+        res.status(200).json({ region });
     } catch (error) {
-        res.status(500).json({ message: "Server xatosi", error: error.message });
+        res.status(500).json({ error: error.message });
     }
 };
 
@@ -75,7 +75,7 @@ const deleteRegion = async (req, res) => {
         await region.destroy();
         res.status(200).json({ message: "Region deleted" });
     } catch (error) {
-        res.status(500).json({ message: "Server xatosi", error: error.message });
+        res.status(500).json({  error: error.message });
     }
 };
 

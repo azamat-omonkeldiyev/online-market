@@ -11,9 +11,8 @@ const getProducts = async (req, res) => {
 
     const queryOptions = {
       include: [
-        { model: Category },
-        { model: User },
-        { model: Comment },
+        { model: Category, attributes: ["id", "name"] },
+        { model: User , attributes: ["id", "name"]}
       ],
       where: {},
       order: [],
@@ -34,7 +33,7 @@ const getProducts = async (req, res) => {
       queryOptions.where.category_id = category_id;
     }
     if (name) {
-      queryOptions.where.name = { [Op.iLike]: `%${name}%` };
+      queryOptions.where.name = { [Op.like]: `%${name}%` };
     }
     if (min_price || max_price) {
       queryOptions.where.price = {};
@@ -68,9 +67,8 @@ const getProduct = async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id, {
       include: [
-        { model: Category },
-        { model: User },
-        { model: Comment },
+        { model: Category,attributes: ["id", "name"] },
+        { model: User,attributes: ["id", "name"] }
       ],
     });
     if (!product) return res.status(404).json({ error: "product not found" });
@@ -114,8 +112,9 @@ const deleteProduct = async (req, res) => {
   try {
     const product = await Product.findByPk(req.params.id);
     if (!product) return res.status(404).json({ error: "product not found" });
+    console.log(product);
     await product.destroy();
-    res.status(204).send();
+    res.status(200).json({message: "deleted successfully"});
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
