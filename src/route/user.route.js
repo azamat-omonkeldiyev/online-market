@@ -10,6 +10,7 @@ const {
   updateUser,
   deleteUser
 } = require("./../controller/user-auth.controller");
+const roleMiddleware = require("../rolemiddleware/roleAuth");
 
 const router = express.Router();
 
@@ -226,7 +227,7 @@ router.post("/refresh", refresh);
  *       200:
  *         description: List of users with pagination
  */
-router.get("/", getUsers);
+router.get("/",roleMiddleware(["admin"]), getUsers);
 
 /**
  * @swagger
@@ -286,7 +287,7 @@ router.get("/:id", getUserById);
  *       404:
  *         description: User not found
  */
-router.patch("/:id", updateUser);
+router.patch("/:id",roleMiddleware(["admin", "superadmin", "seller", "user"]), updateUser);
 
 /**
  * @swagger
@@ -307,6 +308,6 @@ router.patch("/:id", updateUser);
  *       404:
  *         description: User not found
  */
-router.delete("/:id", deleteUser);
+router.delete("/:id",roleMiddleware(["admin","seller", "user"]), deleteUser);
 
 module.exports = router;

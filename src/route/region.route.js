@@ -1,6 +1,6 @@
 const express = require("express");
 const { createRegion, getAllRegions, getRegionById, updateRegion, deleteRegion } = require("../controller/region.controller");
-
+const roleMiddleware = require("../rolemiddleware/roleAuth");
 const router = express.Router();
 
 /**
@@ -109,7 +109,7 @@ router.get("/:id", getRegionById);
  *       404:
  *         description: Region not found
  */
-router.patch("/:id", updateRegion);
+router.patch("/:id",roleMiddleware(["admin", "superadmin"]), updateRegion);
 
 /**
  * @swagger
@@ -130,6 +130,6 @@ router.patch("/:id", updateRegion);
  *       404:
  *         description: Region not found
  */
-router.delete("/:id", deleteRegion);
+router.delete("/:id",roleMiddleware(["admin"]), deleteRegion);
 
 module.exports = router;

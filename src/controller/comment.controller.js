@@ -82,8 +82,12 @@ const createComment = async (req, res) => {
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-
-    const comment = await Comment.create(req.body);
+    let {...rest} = req.body;
+    // console.log("salom", req.userId);
+    const comment = await Comment.create({
+      ...rest,
+      author_id : req.userId
+    });
     res.status(201).json(comment);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -101,7 +105,11 @@ const updateComment = async (req, res) => {
     if (!comment) {
       return res.status(404).json({ error: "comment not found" });
     }
-    await comment.update(req.body);
+    let {...rest} = req.body;
+    await comment.update({
+      ...rest,
+      author_id: comment.author_id
+    });
     res.json(comment);
   } catch (error) {
     res.status(500).json({ message: error.message });

@@ -6,6 +6,7 @@ const {
   updateOrder,
   deleteOrder,
 } = require("../controller/order.controller");
+const roleMiddleware = require("../rolemiddleware/roleAuth");
 
 const router = express.Router();
 
@@ -52,7 +53,7 @@ const router = express.Router();
  *       400:
  *         description: Invalid request data
  */
-router.post("/", createOrder);
+router.post("/",roleMiddleware(["admin", "seller", "user"]), createOrder);
 
 /**
  * @swagger
@@ -116,7 +117,7 @@ router.post("/", createOrder);
  *       500:
  *         description: Internal server error
  */
-router.get("/", getAllOrders);
+router.get("/",roleMiddleware(["admin"]), getAllOrders);
 
 /**
  * @swagger
@@ -171,7 +172,7 @@ router.get("/:id", getOrderById);
  *       404:
  *         description: Order not found
  */
-router.patch("/:id", updateOrder);
+router.patch("/:id",roleMiddleware(["admin", "seller", "superadmin"]), updateOrder);
 
 /**
  * @swagger
@@ -184,8 +185,8 @@ router.patch("/:id", updateOrder);
  *         name: id
  *         required: true
  *         schema:
- *           type: string
- *           format: uuid
+ *           type: integer
+ *           format: 1
  *         description: Order ID
  *     responses:
  *       200:
@@ -193,6 +194,6 @@ router.patch("/:id", updateOrder);
  *       404:
  *         description: Order not found
  */
-router.delete("/:id", deleteOrder);
+router.delete("/:id",roleMiddleware(["admin", "seller", "user"]), deleteOrder);
 
 module.exports = router;

@@ -84,8 +84,12 @@ const createProduct = async (req, res) => {
     if (error) {
       return res.status(400).json({ message: error.details[0].message });
     }
-
-    const product = await Product.create(req.body);
+    console.log(req.userId)
+    let {...rest} = req.body;
+    const product = await Product.create({
+      ...rest,
+      author_id: req.userId
+    });
     res.status(201).json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -100,8 +104,12 @@ const updateProduct = async (req, res) => {
     }
 
     const product = await Product.findByPk(req.params.id);
+    let {...rest} = req.body;
     if (!product) return res.status(404).json({ error: "product not found" });
-    await product.update(req.body);
+    await product.update({
+      ...rest,
+      author_id: product.author_id
+    });
     res.json(product);
   } catch (error) {
     res.status(500).json({ message: error.message });

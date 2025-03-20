@@ -11,16 +11,16 @@ const roleMiddleware = (roles) => {
     
         try {
             let data = jwt.verify(token, process.env.JWT_SECRET);
-
+            console.log()
             if(roles.includes(data.role)){
                 req.userId = data.id;
                 req.userRole = data.role 
                 next();
             }else{
-                res.status(401).send("Not allowed");
+                res.status(401).json({message: "Not allowed"});
             }
         } catch (error) {
-            res.status(401).send({ message: "Invalid token" });
+            res.status(401).json({ message: "Invalid token" });
         }
 
     }

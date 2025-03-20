@@ -1,12 +1,13 @@
 const express = require("express");
 const router = express.Router();
 const commentController = require("../controller/comment.controller");
+const roleMiddleware = require("../rolemiddleware/roleAuth");
 
-router.get("/", commentController.getComments);
-router.get("/:id", commentController.getComment);
-router.post("/", commentController.createComment);
-router.put("/:id", commentController.updateComment);
-router.delete("/:id", commentController.deleteComment);
+router.get("/",roleMiddleware(["admin", "user", "seller", "superadmin"]), commentController.getComments);
+router.get("/:id",roleMiddleware(["admin", "user", "seller", "superadmin"]), commentController.getComment);
+router.post("/",roleMiddleware(["admin", "user", "seller", "superadmin"]), commentController.createComment);
+router.patch("/:id",roleMiddleware(["admin", "user", "seller", "superadmin"]), commentController.updateComment);
+router.delete("/:id", roleMiddleware(["admin", "user", "seller", "superadmin"]), commentController.deleteComment);
 
 /**
  * @swagger
@@ -113,7 +114,6 @@ router.delete("/:id", commentController.deleteComment);
  *             message: "Amazing quality!"
  *             star: 4
  *             product_id: "550e8400-e29b-41d4-a716-446655440000"
- *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       201:
  *         description: Comment created
@@ -134,7 +134,7 @@ router.delete("/:id", commentController.deleteComment);
 /**
  * @swagger
  * /comments/{id}:
- *   put:
+ *   patch:
  *     summary: Update a comment
  *     tags: [Comments]
  *     parameters:
@@ -151,7 +151,6 @@ router.delete("/:id", commentController.deleteComment);
  *           example:
  *             message: "Updated: Really good!"
  *             star: 5
- *             product_id: "550e8400-e29b-41d4-a716-446655440000"
  *             author_id: "550e8400-e29b-41d4-a716-446655440001"
  *     responses:
  *       200:

@@ -158,16 +158,16 @@ const verify = async (req, res) => {
 // Get All Users
 const getUsers = async (req, res) => {
     try {
-      const { region_id, page = 1, limit = 10, sort = "ASC" } = req.query; // Querydan filter, pagination, sort olish
+      const { region_id, page = 1, limit = 10, sort = "ASC" } = req.query; 
   
-      const whereCondition = region_id ? { region_id } : {}; // Region bo‘yicha filter
+      const whereCondition = region_id ? { region_id } : {}; 
   
       const users = await User.findAndCountAll({
         where: whereCondition,
         include: { model: Region },
         limit: parseInt(limit),
         offset: (parseInt(page) - 1) * parseInt(limit),
-        order: [["name", sort.toUpperCase()]], // Ism bo‘yicha sort
+        order: [["name", sort.toUpperCase()]],
       });
   
       res.status(200).json({
