@@ -1,5 +1,6 @@
 const Order = require("../model/order.model");
 const OrderItem = require("../model/orderItem.model");
+const Product = require("../model/product.model");
 const User = require("../model/user.model");
 
 // Order yaratish (Create)
@@ -37,7 +38,17 @@ const getAllOrders = async (req, res) => {
 
     const orders = await Order.findAndCountAll({
       where: whereCondition,
-      include: [{ model: User }, { model: OrderItem }],
+      include: [
+        { model: User, attributes: ["id", "name"] }, 
+        { 
+          model: OrderItem ,
+          include: [
+            {
+              model: Product, 
+              attributes: ["id", "name", "price"], 
+            }
+          ]
+        }],
       limit: parseInt(limit),
       offset: (parseInt(page) - 1) * parseInt(limit),
     });
