@@ -80,7 +80,7 @@ const getOrderById = async (req, res) => {
 
 const getMyOrders = async (req, res) => {
   try {
-    const user_id = req.userId; // Middleware orqali kelayotgan foydalanuvchi ID
+    const user_id = req.userId;
     if (!user_id) {
       return res.status(400).json({ message: "User ID is required" });
     }
@@ -88,17 +88,32 @@ const getMyOrders = async (req, res) => {
     const orders = await Order.findAll({
       where: { user_id },
       include: [
-        { model: OrderItem, attributes: ["id","order_id"], include: [{ model: Product, attributes: ["id", "name", "price"] }] },
+        {
+          model: OrderItem,
+          attributes: ["id", "order_id", "count"],
+          include: [{ model: Product, attributes: ["id", "name", "price"] }],
+        },
       ],
       order: [["createdAt", "DESC"]],
     });
 
-    res.status(200).json({ orders });
+    const totalSum = orders.reduce((orderSum, order) => {
+      const orderTotal = order.orderItems?.reduce((sum, item) => {
+        return sum + (item.count * (item.product?.price || 0));
+      }, 0) || 0;
+
+      return orderSum + orderTotal;
+    }, 0);
+
+    console.log("Final TotalSum:", totalSum);
+
+    res.status(200).json({ orders, totalSum });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
   }
 };
+
 
 // Buyurtmani yangilash (Update)
 const updateOrder = async (req, res) => {

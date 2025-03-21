@@ -143,6 +143,12 @@ const sendOtp = async (req, res) => {
 const verify = async (req, res) => {
   let { email, otp } = req.body;
   try {
+    
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      return res
+        .status(400)
+        .json({ message: "the format of email is incorrect" });
+
     let user = await User.findOne({ where: { email } });
     if (user) {
       return res.status(409).json({ message: "User already exists" });

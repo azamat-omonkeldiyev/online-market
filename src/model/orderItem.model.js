@@ -12,13 +12,16 @@ const OrderItem = db.define("orderItem", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  count: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
   product_id: {
     type: DataTypes.UUID,
     allowNull: false
   }
 });
 
-// OrderItem.belongsTo(Order, { foreignKey: "order_id", onDelete: "CASCADE" });
 OrderItem.belongsTo(Product, { foreignKey: "product_id" });
 
 module.exports = OrderItem;
