@@ -102,7 +102,7 @@ const getProduct = async (req, res) => {
         where: {product_id: req.params.id},
         attributes: ["star"],
     })
-    let averageStar = null
+    let averageStar = 0
     if(comments.length > 0){
         const total = comments.reduce((sum, comment) => sum + comment.star, 0)
         averageStar = (total / comments.length).toFixed(1)
@@ -125,7 +125,7 @@ const createProduct = async (req, res) => {
     let {...rest} = req.body;
     const product = await Product.create({
       ...rest,
-      star: 4,
+      star: 0,
       author_id: req.userId
     });
     res.status(201).json(product);
