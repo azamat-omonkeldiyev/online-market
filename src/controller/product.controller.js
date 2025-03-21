@@ -47,8 +47,32 @@ const getProducts = async (req, res) => {
 
     const products = await Product.findAndCountAll(queryOptions);
 
+    const productIds = await products.rows.map((product) => product.id)
+
+    const comments = await Comment.findAll({
+        where: {product_id: { [Op.in]: productIds}},
+        attributes: ["product_id", "star"],
+    })
+
+    const starMap = {}
+    comments.forEach((comment) => {
+        const productId = comment.product_id
+        if(!starMap[productId]){
+            starMap[productId] = {total: 0, count: 0}
+        }
+        starMap[productId].total += comment.star
+        starMap[productId].count += 1
+    })
+
+    const updatedProducts = products.rows.map((product) => {
+        const prd = product.toJSON()
+        const avgData = starMap[prd.id]
+        prd.star = avgData ? (avgData.total / avgData.count).toFixed(1) : null
+        return prd
+    })
+
     const response = {
-      data: products.rows,
+      data: updatedProducts,
       total: products.count,
     };
 
@@ -73,6 +97,17 @@ const getProduct = async (req, res) => {
       ],
     });
     if (!product) return res.status(404).json({ error: "product not found" });
+
+    const comments = await Comment.findAll({
+        where: {product_id: req.params.id},
+        attributes: ["star"],
+    })
+    let averageStar = null
+    if(comments.length > 0){
+        const total = comments.reduce((sum, comment) => sum + comment.star, 0)
+        averageStar = (total / comments.length).toFixed(1)
+    }
+    product.star = averageStar
     res.json(product);
   } catch (error) {
     console.log(error)
